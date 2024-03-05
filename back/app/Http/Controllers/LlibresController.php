@@ -39,7 +39,7 @@ class LlibresController extends Controller
      */
     public function show(string $id)
     {
-        return Llibre::find($id);
+        return Llibre::findOrFail($id);
     }
 
     /**
@@ -47,7 +47,7 @@ class LlibresController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $llibre = Llibre::find($id);
+        $llibre = Llibre::findOrFail($id);
         $llibre->update($request->all());
         return $llibre;
     }
