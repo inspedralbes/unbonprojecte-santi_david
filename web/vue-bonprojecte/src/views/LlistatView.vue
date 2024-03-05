@@ -1,14 +1,14 @@
 <template>
     <div class="container">
         <h1>Llistat de llibres</h1>
-        <ul>
-            <li v-for="book in books" :key="book.id">
-                {{ book.title }}
-                <ul>
-                    <li>-{{ book.author }}</li>
-                </ul>
-            </li>
-        </ul>
+        <input type="text" v-model="buscador" placeholder="Cerca un llibre">
+        <div class="llibres-container">
+            <div class="item" v-for="book in filteredBooks" :key="book.id">
+                <h2>{{ book.titol }}</h2>
+                <p>{{ book.autor }}</p>
+                <p>{{ book.any }}</p>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -16,59 +16,8 @@
     export default {
         data() {
             return {
-                books: [
-                    {
-                        id: 1,
-                        title: 'Book 1',
-                        author: 'Author 1'
-
-                    },
-                    {
-                        id: 2,
-                        title: 'Book 2',
-                        author: 'Author 2'
-                    },
-                    {
-                        id: 3,
-                        title: 'Book 3',
-                        author: 'Author 3'
-                    },
-                    {
-                        id: 4,
-                        title: 'Book 4',
-                        author: 'Author 4'
-                    },
-                    {
-                        id: 5,
-                        title: 'Book 5',
-                        author: 'Author 5'
-                    },
-                    {
-                        id: 6,
-                        title: 'Book 6',
-                        author: 'Author 6'
-                    },
-                    {
-                        id: 7,
-                        title: 'Book 7',
-                        author: 'Author 7'
-                    },
-                    {
-                        id: 8,
-                        title: 'Book 8',
-                        author: 'Author 8'
-                    },
-                    {
-                        id: 9,
-                        title: 'Book 9',
-                        author: 'Author 9'
-                    },
-                    {
-                        id: 10,
-                        title: 'Book 10',
-                        author: 'Author 10'
-                    }
-                ]
+                books: [],
+                buscador: '',
             };
         },
         created() {
@@ -76,35 +25,34 @@
         },
         methods: {
             fetchBooks() {
-                const url = 'localhost:8000/api/llibres';
-                fetch('url')
+                const url = 'http://localhost:8000/api/llibres';
+                fetch(url)
                     .then(response => response.json())
                     .then(data => {
+                        console.log(data)
                         this.books = data;
                     })
                     .catch(error => {
                         console.error('Error fetching books:', error);
                     });
             }
+        },
+        computed: {
+            filteredBooks() {
+                if(this.buscador !== '') {
+                    return this.books.filter(book => {
+                        return book.titol.toLowerCase().includes(this.buscador.toLowerCase());
+                    });
+                }
+                return this.books;
+            }
         }
     }
 </script>
 
 <style scoped>
-    *{
-        font-family:
-        Inter,
-        -apple-system,
-        BlinkMacSystemFont,
-        'Segoe UI',
-        Roboto,
-        Oxygen,
-        Ubuntu,
-        Cantarell,
-        'Fira Sans',
-        'Droid Sans',
-        'Helvetica Neue',
-        sans-serif;
+    * {
+        font-family: Arial, Helvetica, sans-serif;
         color: #ffffff;
     }
 
@@ -118,18 +66,31 @@
     }
 
     h1 {
-        font-size: 24px;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
     }
 
-    ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
+    .llibres-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
-    li {
-        font-size: 16px;
-        margin-bottom: 5px;
+    .item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #2D2D2D;
+        padding: 10px;
+        margin: 10px;
+        border-radius: 5px;
+    }
+
+    input {
+        margin-bottom: 20px;
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        color: black;
     }
 </style>

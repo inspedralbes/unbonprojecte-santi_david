@@ -1,7 +1,7 @@
 <template>
     <div class="landing">
-        <h1>Bienvenido a la página de inicio</h1>
-        <p>Esta es una hermosa página de inicio.</p>
+        <h1>Bienvenido amigo!</h1>
+        <p>En un lugar de la Mancha...</p>
         <router-link to="/llistat">Ir a Llistat</router-link>
     </div>
 </template>
@@ -14,19 +14,7 @@ export default {
 
 <style scoped>
 *{
-    font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     color: #ffffff;
 }
 .landing {
