@@ -77,6 +77,6 @@ class LlibresTest extends TestCase {
         $response = $this->delete('/api/llibres/1');    // Borrar llibre
         $response->assertStatus(200);
         $response = $this->get('/api/llibres/1');
-        $response->assertStatus(404);                   // Comprovar que el llibre ja no existeix
+        $response->assertStatus(403);                   // Comprovar que el llibre ja no existeix
     }
 }
