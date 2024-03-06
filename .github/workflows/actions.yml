@@ -1,0 +1,47 @@
+name: Tests and Deployment
+
+on:
+  push:
+    branches:
+      - main
+      - github-actions
+
+jobs:
+  laravel-tests:
+    runs-on: ubuntu-latest
+
+    services: 
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: laravel
+          MYSQL_USER: root
+          MYSQL_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          extensions: mbstring, xml, ctype, iconv, mysql
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest --working-directory=./back
+
+      - name: Copy .env file
+        run: cp ./back/.env.example ./back/.env
+
+      - name: Generate key
+        run: php ./back/artisan key:generate
+
+      - name: Run migrations
+        run: php ./back/artisan migrate --env=testing
+
+      - name: Run Laravel Tests
+        run: php ./back/artisan test
