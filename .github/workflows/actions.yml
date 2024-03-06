@@ -45,3 +45,28 @@ jobs:
       - name: Run Laravel Tests
         run: |
           cd ./back && php artisan test
+
+  build-vue:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '21.x'
+    - name: Install npm dependencies
+      run: npm install
+      working-directory: ./web/vue-bonprojecte
+    - name: Run build task
+      run: npm run build --if-present
+      working-directory: ./web/vue-bonprojecte
+    - name: Deploy to Server
+      uses: easingthemes/ssh-deploy@main
+      with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-rlgoDzvc -i --delete"
+          SOURCE: "web/vue-bonprojecte/dist/" 
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: ${{ secrets.REMOTE_TARGET }}
+          EXCLUDE: "/dist/, /node_modules/"
