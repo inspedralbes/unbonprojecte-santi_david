@@ -43,4 +43,5 @@ jobs:
         run: php ./back/artisan migrate --env=testing
 
       - name: Run Laravel Tests
-        run: php ./back/artisan test
+        run: |
+          cd ./back && php artisan test
