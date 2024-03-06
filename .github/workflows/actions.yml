@@ -28,11 +28,12 @@ jobs:
           php-version: '8.0'
           extensions: mbstring, xml, ctype, iconv, mysql
           coverage: none
+    
+      - name: Update Composer
+        run: composer self-update
 
       - name: Install Composer dependencies
-        run: |
-            cd ./back
-            composer install --prefer-dist --no-progress --no-suggest
+        run: composer install --prefer-dist --no-progress --no-suggest --working-directory=./back
 
       - name: Copy .env file
         run: cp ./back/.env.example ./back/.env
