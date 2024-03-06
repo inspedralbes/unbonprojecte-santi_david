@@ -25,7 +25,15 @@
         },
         methods: {
             fetchBooks() {
-                const url = 'http://localhost:8000/api/llibres';
+                let hostname = window.location.hostname;
+                let url;
+
+                if (hostname === 'a22sanpujsau.daw.inspedralbes.cat') {
+                    url = 'http://a22sanpujsau.daw.inspedralbes.cat/back/public/api/llibres';
+                } else {
+                    url = 'http://'+ hostname +':8000/api/getCategories';
+                }
+                
                 fetch(url)
                     .then(response => response.json())
                     .then(data => {
