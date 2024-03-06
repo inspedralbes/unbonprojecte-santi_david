@@ -46,8 +46,25 @@ jobs:
         run: |
           cd ./back && php artisan test
 
+  deploy-laravel:
+    runs-on: ubuntu-latest
+    needs: laravel-tests
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy Laravel Application to Server
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-rlgoDzvc -i --delete"
+          SOURCE: "back/"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: ${{ secrets.BACK_REMOTE_TARGET }}
+          EXCLUDE: "/vendor/, /node_modules/"
+
   build-vue:
     runs-on: ubuntu-latest
+    needs: [laravel-tests, deploy-laravel]
     steps:
     - uses: actions/checkout@v3
     - name: Install Node.js
@@ -68,5 +85,5 @@ jobs:
           SOURCE: "web/vue-bonprojecte/dist/" 
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: ${{ secrets.REMOTE_TARGET }}
+          TARGET: ${{ secrets.FRONT_REMOTE_TARGET }}
           EXCLUDE: "/dist/, /node_modules/"
