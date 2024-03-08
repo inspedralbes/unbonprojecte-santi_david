@@ -61,6 +61,16 @@ jobs:
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: ${{ secrets.BACK_REMOTE_TARGET }}
           EXCLUDE: "/vendor/, /node_modules/"
+      - name: Post-deployment Steps
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} <<EOF
+            cd ${{ secrets.BACK_REMOTE_TARGET }}
+            composer install --no-dev --prefer-dist
+            php artisan migrate --force
+            php artisan optimize
+            # Restart PHP-FPM; Example for PHP 7.4
+            sudo service php8.2-fpm restart
+          EOF
 
   build-vue:
     runs-on: ubuntu-latest
