@@ -28,10 +28,10 @@
                 let hostname = window.location.hostname;
                 let url;
 
-                if (hostname === 'a22sanpujsau.daw.inspedralbes.cat') {
-                    url = 'http://a22sanpujsau.daw.inspedralbes.cat/back/public/api/llibres';
+                if(hostname === 'localhost') {
+                    url = 'http://'+ hostname +':8000/api/llibres';
                 } else {
-                    url = 'http://'+ hostname +':8000/api/getCategories';
+                    url = 'http://a22sanpujsau.daw.inspedralbes.cat/back/public/api/llibres';
                 }
                 
                 fetch(url)
