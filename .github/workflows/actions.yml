@@ -86,7 +86,7 @@ jobs:
       run: npm install
       working-directory: ./web/vue-bonprojecte
     - name: Run build task
-      run: npm run build
+      run: npm run build --if-present
       working-directory: ./web/vue-bonprojecte
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@main
@@ -97,4 +97,3 @@ jobs:
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: ${{ secrets.FRONT_REMOTE_TARGET }}
-          EXCLUDE: "/dist/, /node_modules/"
